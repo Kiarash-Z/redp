@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 
-import coverSrc from '../../../assets/images/do-be-shak.jpg';
-import musicSrc from '../../../assets/music/ax.mp3'
-
-class PlayerCover extends Component {
+const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends Component {
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
   }
   componentDidMount() {
     const audio = new Audio();
-    audio.src = musicSrc;
-    audio.play();
+    // audio.src = musicSrc;
     const context = new AudioContext();
     const analyser = context.createAnalyser();
     const canvas = this.canvasRef.current;
@@ -41,19 +38,36 @@ class PlayerCover extends Component {
     }
   }
   render() {
+    const { appStore } = this.props;
     return (
       <div className="player-cover"v>
         <div className="player-cover__titles-container">
-          <h2 className="player-cover__title">Ax</h2>
-          <h3 className="player-cover__title -secondary">Do Be Shak</h3>
+          <h2
+            className="player-cover__title"
+            style={{ color: appStore.playingSong.title ? '' : 'transparent' }}
+          >
+            {appStore.playingSong.title || 'blank'}
+          </h2>
+          <h3
+            className="player-cover__title -secondary"
+            style={{ color: appStore.playingSong.artist ? '' : 'transparent' }}
+          >
+            {appStore.playingSong.artist || 'blank'}
+          </h3>
         </div>
-        <figure className="player-cover__image-container">
-          <img src={coverSrc} className="player-cover__image" />
-        </figure>
+        {appStore.playingSong.picture ? (
+          <figure className="player-cover__image-container">
+            <img draggable={false} src={`data:image/jpeg;base64,${appStore.playingSong.picture}`} className="player-cover__image" />
+          </figure>
+        ) : (
+          <div className="player-cover__image-container">
+            <i className="a-music player-cover__image-icon"/>
+          </div>
+        )}
         <canvas className="player-cover__bars" id="bars" ref={this.canvasRef} />
       </div>
     );
   }
-}
+}))
 
 export default PlayerCover;

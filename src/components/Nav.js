@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import './Nav.css';
 
-class Nav extends Component {
+class Nav extends PureComponent {
   render() {
     return (
       <nav className="nav">

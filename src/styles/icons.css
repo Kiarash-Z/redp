@@ -48,3 +48,6 @@ i {
 .a-play:before {
   content: "\e907";
 }
+.a-music:before {
+  content: "\e908";
+}
