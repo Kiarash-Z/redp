@@ -1,6 +1,6 @@
 .nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 2rem 2.5rem;
   font-size: 2rem;
 }

@@ -13,7 +13,7 @@ const url = require('url')
 let mainWindow
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 1000, height: 750 });
+  mainWindow = new BrowserWindow({width: 1000, height: 750, titleBarStyle: 'hidden' });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   mainWindow.on('closed', () => mainWindow = null);
 }

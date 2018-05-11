@@ -6,6 +6,10 @@ html {
   font-weight: 300;
 }
 
+body {
+  background: var(--color-white);
+}
+
 button {
   border: none;
   background: transparent;
