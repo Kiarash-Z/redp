@@ -5,10 +5,12 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
+    this.animatedCanvas = this.animatedCanvas.bind(this);
   }
-  componentDidMount() {
-    const audio = new Audio();
-    // audio.src = musicSrc;
+
+  animatedCanvas() {
+    const audio = this.props.appStore.playingSong.audio;
+    if (!audio) return;
     const context = new AudioContext();
     const analyser = context.createAnalyser();
     const canvas = this.canvasRef.current;
@@ -24,7 +26,7 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
       analyser.getByteFrequencyData(fbc_array);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       var grd=ctx.createLinearGradient(0,0,0,canvas.height - 20);
-      grd.addColorStop(0,'rgba(230, 51, 84, 0.2)');
+      grd.addColorStop(0,'rgba(230, 51, 84, 0.7)');
       grd.addColorStop(1,'white');
       ctx.fillStyle = grd;
       const bars = 150;
@@ -36,6 +38,11 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
         ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
       }
     }
+  }
+
+  componentDidUpdate() {
+    if (!this.props.appStore.playingSong.isPlaying) return;
+    this.animatedCanvas();
   }
   render() {
     const { appStore } = this.props;
