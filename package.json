@@ -1,0 +1,25 @@
+{
+  "name": "music",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/electron-starter.js",
+  "dependencies": {
+    "electron-is-dev": "^0.3.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "electron": "^2.0.0",
+    "electron-builder": "^20.13.3",
+    "wait-on": "^2.1.0"
+  }
+}

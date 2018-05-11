@@ -1,0 +1,17 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-family: 'Dosis';
+  font-size: 62.5%;
+  font-weight: 300;
+}
+
+button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+button:active, button:focus {
+  outline: none;
+}

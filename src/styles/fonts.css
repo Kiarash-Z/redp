@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Dosis';
+  src: url('../assets//fonts/Dosis-Light.ttf')  format('truetype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Dosis';
+  src: url('../assets//fonts/Dosis-Regular.ttf')  format('truetype');
+  font-weight: 400;
+}

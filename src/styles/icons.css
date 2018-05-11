@@ -1,0 +1,50 @@
+@font-face {
+  font-family: 'music';
+  src:  url('../assets/fonts/music.eot?hc5393');
+  src:  url('../assets/fonts/music.eot?hc5393#iefix') format('embedded-opentype'),
+    url('../assets/fonts/music.ttf?hc5393') format('truetype'),
+    url('../assets/fonts/music.woff?hc5393') format('woff'),
+    url('../assets/fonts/music.svg?hc5393#music') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'music' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.a-left:before {
+  content: "\e900";
+}
+.a-list:before {
+  content: "\e901";
+}
+.a-repeat:before {
+  content: "\e902";
+}
+.a-folder:before {
+  content: "\e905";
+}
+.a-next:before {
+  content: "\e903";
+}
+.a-previous:before {
+  content: "\e904";
+}
+.a-pause:before {
+  content: "\e906";
+}
+.a-play:before {
+  content: "\e907";
+}

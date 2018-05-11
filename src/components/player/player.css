@@ -1,0 +1,124 @@
+.player {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*
+  Player Cover
+*/
+
+.player-cover {
+  position: relative;
+}
+
+.player-cover__titles-container {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.player-cover__title {
+  color: var(--color-primary);
+  margin-bottom: 0.7rem;
+}
+
+.player-cover__title.-secondary {
+  color: var(--color-black);
+  font-size: 1.4rem;
+}
+
+.player-cover__image-container {
+  width: 32vw;
+  height: 32vw;
+  margin-top: 5rem;
+  border-radius: 5px;
+  box-shadow: 0.5rem 1.5rem 4rem var(--color-black-light);
+}
+
+.player-cover__image {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.player-cover__bars {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+/*
+  Player Controls
+*/
+
+.player-controls {
+  width: 50%;
+  margin-top: 6rem;
+  min-width: 30rem;
+}
+
+.player-progress-container {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.player-progress {
+  width: 100%;
+  height: 0.3rem;
+  border-radius: 3px;
+  background: #DEDEDE;
+}
+
+.player-progress__bar {
+  width: 40%;
+  height: 100%;
+  background: var(--color-primary);
+  position: relative;
+  transition: 0.5s;
+}
+
+.player-progress__dragger {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -0.6rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  transition: 0.2s;
+  background: var(--color-primary);
+  opacity: 0;
+}
+
+.player-progress-container:hover .player-progress__dragger{
+  opacity: 1;
+}
+
+.player-controls-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.player-controls__button {
+  color: var(--color-grey);
+  font-size: 3rem;
+}
+
+.player-controls__button.-play {
+  padding: 2.5rem;
+  border-radius: 50%;
+  box-shadow: 0 0 4rem var(--color-black-very-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 6rem;
+  color: var(--color-primary);
+}
+
+.player-controls__play {
+  transform: translateX(3px);
+}
