@@ -11,6 +11,9 @@
 
 .player-cover {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .player-cover__titles-container {
@@ -31,9 +34,9 @@
 .player-cover__image-container {
   width: 32vw;
   height: 32vw;
-  margin-top: 5rem;
+  margin-top: 4rem;
   border-radius: 5px;
-  box-shadow: 0.5rem 1.5rem 4rem var(--color-black-light);
+  box-shadow: 0.5rem 0.5rem 3rem var(--color-black-light);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,7 +60,7 @@
 .player-cover__bars {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 32vw;
 }
 
 /*

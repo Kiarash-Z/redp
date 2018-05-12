@@ -1,6 +1,5 @@
 import { decorate, observable, computed, action } from 'mobx';
-var fs = window.require('fs');
-var mm = window.require('musicmetadata');
+var jsmediatags = window.require('jsmediatags');
 
 class AppStore {
   songs = [];
@@ -9,33 +8,61 @@ class AppStore {
 
   openFile(filePaths) {
     this.songs = filePaths.map(path => {
+      const filePath = `file://${path}`
+      const audio = new Audio();
+      audio.src = filePath;
       return {
-        filePath: `file://${path}`,
+        filePath,
+        audio,
         fsPath: path,
-        id: path
+        id: path,
       }
     });
+    this.playFirstSong();
+    this.readSongsMetadata();
+  }
+
+  readSongsMetadata() {
+    const that = this;
     this.songs.forEach(item => {
-      mm(fs.createReadStream(item.fsPath), (err, metadata) => {
-        if (err) throw err;
-        this.songs = this.songs.map((song, index) => {
-          if (song.id === item.id) song = {
-            ...song,
-            ...metadata,
-            picture: metadata.picture[0].data.toString('base64'),
-            artist: metadata.artist[0],
-          };
-          const audio = new Audio();
-          if (index === 0) {
-            audio.src = song.filePath;
-            audio.play();
-            song.isPlaying = true;
-            song.isActive = true;
+      new jsmediatags.Reader(item.fsPath)
+        .setTagsToRead(['title', 'artist', 'picture'])
+        .read({
+          onSuccess({ tags }) {
+            that.songs = that.songs.map(song => {
+              if (song.id === item.id && !song.artist) {
+              const imageData = tags.picture.data;
+              let base64String = '';
+              for (var i = 0; i < imageData.length; i++) {
+                base64String += String.fromCharCode(imageData[i]);
+              }
+                song = {
+                  ...song,
+                  audio: song.audio,
+                  title: tags.title,
+                  artist: tags.artist,
+                  picture: `data:${tags.picture.format};base64, ${window.btoa(base64String)}`,
+                };
+              }
+              return song;
+            });
+          },
+          onError(err) {
+            console.log(err)
           }
-          return { ...song, audio };
-        });
+        })
       });
-    });
+  }
+
+  playFirstSong() {
+    this.songs = this.songs.map((song, index) => {
+      if (!index) {
+        song.audio.play();
+        song.isPlaying = true;
+        song.isActive = true;
+      }
+      return song;
+    })
   }
 
   togglePlay() {
@@ -62,8 +89,8 @@ class AppStore {
     this.duration = this.playingSong.audio.duration;
   }
 
-  updateCurrent(value = this.playingSong.audio.currentTime) {
-    this.current = value;
+  updateCurrent(value) {
+    this.current = value || this.playingSong.audio.currentTime;
   }
 
   get playingSong() {
@@ -99,6 +126,8 @@ decorate(AppStore, {
   seek: action.bound,
   setDuration: action.bound,
   updateCurrent: action.bound,
+  readSongsMetadata: action.bound,
+  playFirstSong: action.bound,
 
   playingSong: computed,
   formattedCurrent: computed,

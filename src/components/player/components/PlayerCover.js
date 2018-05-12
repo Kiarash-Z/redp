@@ -5,19 +5,24 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
-    this.animatedCanvas = this.animatedCanvas.bind(this);
+    this.animateCanvas = this.animateCanvas.bind(this);
   }
 
-  animatedCanvas() {
+  componentDidUpdate() {
+    if (!this.props.appStore.playingSong.isPlaying) return;
+    this.animateCanvas();
+  }
+
+  animateCanvas() {
     const audio = this.props.appStore.playingSong.audio;
     if (!audio) return;
-    const context = new AudioContext();
-    const analyser = context.createAnalyser();
+    this.audioContext = this.audioContext || new AudioContext();
+    this.source = this.source || this.audioContext.createMediaElementSource(audio);
+    const analyser = this.audioContext.createAnalyser();
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const source = context.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(context.destination);
+    this.source.connect(analyser);
+    analyser.connect(this.audioContext.destination);
     frameLooper();
 
     function frameLooper() {
@@ -40,10 +45,6 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
     }
   }
 
-  componentDidUpdate() {
-    if (!this.props.appStore.playingSong.isPlaying) return;
-    this.animatedCanvas();
-  }
   render() {
     const { appStore } = this.props;
     return (
@@ -64,7 +65,7 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
         </div>
         {appStore.playingSong.picture ? (
           <figure className="player-cover__image-container">
-            <img draggable={false} src={`data:image/jpeg;base64,${appStore.playingSong.picture}`} className="player-cover__image" />
+            <img draggable={false} src={appStore.playingSong.picture} className="player-cover__image" />
           </figure>
         ) : (
           <div className="player-cover__image-container">

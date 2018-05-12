@@ -69,10 +69,12 @@ if (isDev) {
     submenu: [
       {
         label: 'Toggle DevTools',
+        accelerator: process.platform === 'darwin' ? 'Command+I' : 'Ctrl+I',
         click(item, focusedWindow) {
           focusedWindow.toggleDevTools();
         }
-      }
+      },
+      { role: 'reload' }
     ]
   })
 }
