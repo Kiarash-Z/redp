@@ -12,12 +12,12 @@ const mainMenuTemplate = [
         label: 'Open File',
         click() {
           dialog.showOpenDialog(mainWindow, {
-            properties: ['openFile'],
+            properties: ['openFile', 'multiSelections'],
             filters: [
               {name: 'Audio Files', extensions: ['mp3']},
             ]
           }, filePaths => {
-            mainWindow.webContents.send('files:open', filePaths)
+            if(filePaths) mainWindow.webContents.send('files:open', filePaths)
           });
         }
       },
