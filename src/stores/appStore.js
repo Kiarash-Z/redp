@@ -114,6 +114,9 @@ class AppStore {
   get barWidth() {
     return `${(this.current / this.duration) * 100}%`
   }
+  get isControlDisabled() {
+    return !this.playingSong.audio;
+  }
 }
 
 decorate(AppStore, {
@@ -133,6 +136,7 @@ decorate(AppStore, {
   formattedCurrent: computed,
   formattedDuration: computed,
   barWidth: computed,
+  isControlDisabled: computed,
 });
 
 const appStore = new AppStore();

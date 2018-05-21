@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import PlayerCover from './components/PlayerCover';
-import PlayerControls from './components/PlayerControls';
-import './player.css';
+import SongsList from './components/songs list';
+import PlayerControls from './components/player controls';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -15,8 +14,8 @@ const Player = inject('appStore')(observer(class PlayerClass extends Component {
   }
   render() {
     return (
-      <section className="player">
-        <PlayerCover />
+      <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '1rem'}}>
+        <SongsList />
         <PlayerControls />
       </section>
     );

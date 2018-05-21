@@ -1,0 +1,53 @@
+.song-cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.song-cover__titles-container {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.song-cover__title {
+  color: var(--color-primary);
+  margin-bottom: 0.7rem;
+}
+
+.song-cover__title.-secondary {
+  color: var(--color-black);
+  font-size: 1.4rem;
+}
+
+.song-cover__image-container {
+  width: 32vw;
+  height: 32vw;
+  margin-top: 4rem;
+  border-radius: 5px;
+  box-shadow: 0.5rem 0.5rem 3rem var(--color-black-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.song-cover__image {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.song-cover__image-icon {
+  font-size: 15rem;
+  transform: translateX(-15px);
+  background: -webkit-linear-gradient(#c9c8c8, var(--color-primary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.song-cover__bars {
+  position: absolute;
+  bottom: 0;
+  width: 32vw;
+}

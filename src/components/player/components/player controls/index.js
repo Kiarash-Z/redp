@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
+import './PlayerControls.css';
+
 let isMouseDown = false;
 
 const PlayerControls = inject('appStore')(observer(class PlayerControlsClass extends Component {
@@ -8,10 +10,6 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
     super(props);
     this.barRef = React.createRef();
     this.progressRef = React.createRef();
-
-    this.updateBar = this.updateBar.bind(this);
-    this.changeProgress = this.changeProgress.bind(this);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +32,7 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
     this.props.appStore.playingSong.audio.addEventListener('loadedmetadata', this.props.appStore.setDuration);
   }
 
-  handleMouseMove(e) {
+  handleMouseMove = e => {
     if (!isMouseDown) return;
     const progressEl = this.progressRef.current
     const { offsetLeft: left } = progressEl;
@@ -46,13 +44,13 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
     }
   }
 
-  changeProgress(e) {
+  changeProgress = e => {
     e.stopPropagation();
     const progressEl = this.progressRef.current;
     this.props.appStore.seek((e.clientX - progressEl.offsetLeft)  / progressEl.offsetWidth);
   }
 
-  updateBar({ target: audio }) {
+  updateBar = ({ target: audio }) => {
     if (isMouseDown) return;
     this.props.appStore.updateCurrent();
   }
@@ -73,16 +71,16 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
           <span>{appStore.formattedDuration}</span>
         </div>
 
-        <div className="player-controls-container" disabled={!appStore.playingSong.audio}>
+        <div className="player-controls-container" disabled={appStore.isControlDisabled}>
           <button className="player-controls__button">
             <i className="a-previous" />
           </button>
 
-          <button className="player-controls__button -play" onClick={appStore.togglePlay} disabled={!appStore.playingSong.audio}>
+          <button className="player-controls__button -play" onClick={appStore.togglePlay} disabled={appStore.isControlDisabled}>
             <i className={`a-${appStore.playingSong.isPlaying ? 'pause' : 'play player-controls__play'}`} />
           </button>
 
-          <button className="player-controls__button" disabled={!appStore.playingSong.audio}>
+          <button className="player-controls__button" disabled={appStore.isControlDisabled}>
             <i className="a-next" />
           </button>
         </div>

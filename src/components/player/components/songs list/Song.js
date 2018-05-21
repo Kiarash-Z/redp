@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends Component {
+import './SongsList.css';
+
+const Song = inject('appStore')(observer(class Song extends Component {
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
-    this.animateCanvas = this.animateCanvas.bind(this);
   }
 
   componentDidUpdate() {
@@ -13,7 +14,7 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
     this.animateCanvas();
   }
 
-  animateCanvas() {
+  animateCanvas = () => {
     const audio = this.props.appStore.playingSong.audio;
     if (!audio) return;
     this.audioContext = this.audioContext || new AudioContext();
@@ -46,36 +47,26 @@ const PlayerCover = inject('appStore')(observer(class PlayerCoverClass extends C
   }
 
   render() {
-    const { appStore } = this.props;
+    const { appStore, title, artist, picture } = this.props;
     return (
-      <div className="player-cover"v>
-        <div className="player-cover__titles-container">
-          <h2
-            className="player-cover__title"
-            style={{ color: appStore.playingSong.title ? '' : 'transparent' }}
-          >
-            {appStore.playingSong.title || 'blank'}
-          </h2>
-          <h3
-            className="player-cover__title -secondary"
-            style={{ color: appStore.playingSong.artist ? '' : 'transparent' }}
-          >
-            {appStore.playingSong.artist || 'blank'}
-          </h3>
+      <div className="song-cover">
+        <div className="song-cover__titles-container">
+          <h2 className="song-cover__title">{title}&nbsp;</h2>
+          <h3 className="song-cover__title -secondary">{artist}&nbsp;</h3>
         </div>
-        {appStore.playingSong.picture ? (
-          <figure className="player-cover__image-container">
-            <img draggable={false} src={appStore.playingSong.picture} className="player-cover__image" />
+        {picture ? (
+          <figure className="song-cover__image-container">
+            <img draggable={false} src={picture} className="song-cover__image" />
           </figure>
         ) : (
-          <div className="player-cover__image-container">
-            <i className="a-music player-cover__image-icon"/>
+          <div className="song-cover__image-container">
+            <i className="a-music song-cover__image-icon"/>
           </div>
         )}
-        <canvas className="player-cover__bars" id="bars" ref={this.canvasRef} />
+        <canvas className="song-cover__bars" id="bars" ref={this.canvasRef} />
       </div>
     );
   }
 }))
 
-export default PlayerCover;
+export default Song;
