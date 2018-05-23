@@ -1,5 +1,6 @@
 import { decorate, observable, computed, action } from 'mobx';
-var jsmediatags = window.require('jsmediatags');
+import { TweenLite } from 'gsap/all';
+const jsmediatags = window.require('jsmediatags');
 
 class AppStore {
   songs = [];
@@ -7,11 +8,12 @@ class AppStore {
   current = 0;
 
   openFile(filePaths) {
-    this.songs = filePaths.map(path => {
+    this.songs = filePaths.map((path, index) => {
       const filePath = `file://${path}`
       const audio = new Audio();
       audio.src = filePath;
       return {
+        index,
         filePath,
         audio,
         fsPath: path,
@@ -93,6 +95,47 @@ class AppStore {
     this.current = value || this.playingSong.audio.currentTime;
   }
 
+  startSongChange(direction) {
+    const songsListEl = document.getElementById('songsList');
+    const prevSongEl = document.getElementById('activeSong');
+    const nextSongEl = prevSongEl[direction === 'next' ? 'nextElementSibling' : 'previousElementSibling'];
+    const movement = `${direction === 'next' ? '-' : '+' }=${prevSongEl.offsetWidth}`;
+    const animationDuration = 0.3;
+
+    TweenLite.to(prevSongEl, animationDuration, {
+      scale: 0.85,
+      x: 0,
+    });
+    TweenLite.to(nextSongEl, animationDuration, {
+      scale: 1,
+      x: 0,
+    });
+    TweenLite.to(songsListEl, animationDuration, {
+      x: movement,
+      onComplete: () => { this.changeSong(direction) },
+    });
+  }
+
+  changeSong(direction) {
+    this.resetCurrentSong();
+    const nextSong = this.songs
+      .find(song => song.index === this.playingSong.index + (direction === 'next' ? 1 : -1));
+    this.songs = this.songs.map(song => {
+      const condition = song.id === nextSong.id;
+      song.isPlaying = condition;
+      song.isActive = condition;
+      return song;
+    });
+    this.setDuration();
+    this.updateCurrent();
+    this.playingSong.audio.play();
+  }
+
+  resetCurrentSong() {
+    this.playingSong.audio.pause();
+    this.playingSong.audio.currentTime = 0;
+  }
+
   get playingSong() {
     return this.songs.find(song => song.isActive) || {};
   }
@@ -131,6 +174,9 @@ decorate(AppStore, {
   updateCurrent: action.bound,
   readSongsMetadata: action.bound,
   playFirstSong: action.bound,
+  startSongChange: action.bound,
+  changeSong: action.bound,
+  resetCurrentSong: action.bound,
 
   playingSong: computed,
   formattedCurrent: computed,

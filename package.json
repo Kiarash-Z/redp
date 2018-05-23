@@ -4,7 +4,9 @@
   "private": true,
   "main": "src/electron-starter.js",
   "dependencies": {
+    "classnames": "^2.2.5",
     "electron-is-dev": "^0.3.0",
+    "gsap": "^2.0.0",
     "jsmediatags": "^3.8.1",
     "mobx": "^4.2.1",
     "mobx-react": "^5.1.2",
@@ -13,11 +15,11 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "rs-start": "react-scripts start",
+    "start": "concurrently \"BROWSER=none yarn rs-start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",

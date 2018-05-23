@@ -71,16 +71,28 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
           <span>{appStore.formattedDuration}</span>
         </div>
 
-        <div className="player-controls-container" disabled={appStore.isControlDisabled}>
-          <button className="player-controls__button">
+        <div className="player-controls-container">
+          <button
+            className="player-controls__button"
+            disabled={appStore.isControlDisabled}
+            onClick={() => { appStore.startSongChange('previous') }}
+          >
             <i className="a-previous" />
           </button>
 
-          <button className="player-controls__button -play" onClick={appStore.togglePlay} disabled={appStore.isControlDisabled}>
+          <button
+            className="player-controls__button -play"
+            onClick={appStore.togglePlay}
+            disabled={appStore.isControlDisabled}
+          >
             <i className={`a-${appStore.playingSong.isPlaying ? 'pause' : 'play player-controls__play'}`} />
           </button>
 
-          <button className="player-controls__button" disabled={appStore.isControlDisabled}>
+          <button
+            className="player-controls__button"
+            disabled={appStore.isControlDisabled}
+            onClick={() => { appStore.startSongChange('next') }}
+          >
             <i className="a-next" />
           </button>
         </div>

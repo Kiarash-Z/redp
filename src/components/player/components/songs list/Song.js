@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import classNames from 'classnames';
 
 import './SongsList.css';
 
@@ -10,13 +11,13 @@ const Song = inject('appStore')(observer(class Song extends Component {
   }
 
   componentDidUpdate() {
-    if (!this.props.appStore.playingSong.isPlaying) return;
+    const { playingSong } = this.props.appStore;
+    if (!playingSong.isPlaying || playingSong.id !== this.props.id) return;
     this.animateCanvas();
   }
 
   animateCanvas = () => {
-    const audio = this.props.appStore.playingSong.audio;
-    if (!audio) return;
+    const audio = this.props.audio;
     this.audioContext = this.audioContext || new AudioContext();
     this.source = this.source || this.audioContext.createMediaElementSource(audio);
     const analyser = this.audioContext.createAnalyser();
@@ -31,7 +32,7 @@ const Song = inject('appStore')(observer(class Song extends Component {
       const fbc_array = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(fbc_array);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      var grd=ctx.createLinearGradient(0,0,0,canvas.height - 20);
+      const grd = ctx.createLinearGradient(0,0,0,canvas.height - 20);
       grd.addColorStop(0,'rgba(230, 51, 84, 0.7)');
       grd.addColorStop(1,'white');
       ctx.fillStyle = grd;
@@ -47,23 +48,27 @@ const Song = inject('appStore')(observer(class Song extends Component {
   }
 
   render() {
-    const { appStore, title, artist, picture } = this.props;
+    const { appStore, title, artist, picture, id, index } = this.props;
+    const { index: playingIndex, id: playingId } = appStore.playingSong;
     return (
-      <div className="song-cover">
-        <div className="song-cover__titles-container">
-          <h2 className="song-cover__title">{title}&nbsp;</h2>
-          <h3 className="song-cover__title -secondary">{artist}&nbsp;</h3>
+      <div
+        className={classNames('song', { '-scaled': (index < playingIndex) || (index > playingIndex) })}
+        id={id === playingId ? 'activeSong' : ''}
+      >
+        <div className="song__titles-container">
+          <h2 className="song__title">{title}&nbsp;</h2>
+          <h3 className="song__title -secondary">{artist}&nbsp;</h3>
         </div>
         {picture ? (
-          <figure className="song-cover__image-container">
-            <img draggable={false} src={picture} className="song-cover__image" />
+          <figure className="song__image-container">
+            <img className="song__image" draggable={false} src={picture} />
           </figure>
         ) : (
-          <div className="song-cover__image-container">
-            <i className="a-music song-cover__image-icon"/>
+          <div className="song__image-container">
+            <i className="a-music song__image-icon"/>
           </div>
         )}
-        <canvas className="song-cover__bars" id="bars" ref={this.canvasRef} />
+        <canvas className="song__bars" id="bars" ref={this.canvasRef} />
       </div>
     );
   }

@@ -9,7 +9,7 @@ const mainMenuTemplate = [
     label: 'File',
     submenu: [
       {
-        label: 'Open File',
+        label: 'Open File(s)',
         click() {
           dialog.showOpenDialog(mainWindow, {
             properties: ['openFile', 'multiSelections'],
