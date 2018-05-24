@@ -14,7 +14,15 @@ const Player = inject('appStore')(observer(class PlayerClass extends Component {
   }
   render() {
     return (
-      <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '1rem'}}>
+      <section style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '1rem',
+          flex: '1',
+          justifyContent: 'flex-end'
+        }}
+      >
         <SongsList />
         <PlayerControls />
       </section>

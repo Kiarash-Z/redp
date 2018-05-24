@@ -9,14 +9,26 @@ html {
 
 body {
   background: var(--color-white);
+  -webkit-app-region: drag;
 }
 
 button {
   border: none;
   background: transparent;
   cursor: pointer;
+  -webkit-app-region: no-drag;
 }
 
 button:active, button:focus {
   outline: none;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, strong, i {
+  -webkit-app-region: drag;
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 75%;
+  }
 }

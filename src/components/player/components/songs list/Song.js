@@ -28,7 +28,7 @@ const Song = inject('appStore')(observer(class Song extends Component {
     frameLooper();
 
     function frameLooper() {
-      window.webkitRequestAnimationFrame(frameLooper);
+      window.requestAnimationFrame(frameLooper);
       const fbc_array = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(fbc_array);
       ctx.clearRect(0, 0, canvas.width, canvas.height);

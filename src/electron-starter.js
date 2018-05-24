@@ -3,6 +3,9 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 
+const { APP_NAME, SIZE, MAX_SIZE, MIN_SIZE } = require('./constants/appConstants');
+
+app.setName(APP_NAME)
 
 const mainMenuTemplate = [
   {
@@ -29,13 +32,15 @@ let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 750,
+    width: SIZE.width,
+    height: SIZE.height,
     titleBarStyle: 'hidden',
     webPreferences: { webSecurity: false }
   });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   mainWindow.on('closed', () => mainWindow = null);
+  mainWindow.setMinimumSize(MIN_SIZE.width, MIN_SIZE.height);
+  mainWindow.setMaximumSize(MAX_SIZE.width, MAX_SIZE.height);
   // Menu
   if (process.platform === 'darwin') {
     mainMenuTemplate.unshift({

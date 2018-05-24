@@ -2,6 +2,7 @@ import { decorate, observable, computed, action } from 'mobx';
 import { TweenLite } from 'gsap/all';
 const jsmediatags = window.require('jsmediatags');
 
+let isAnimating = false;
 class AppStore {
   songs = [];
   duration = 0;
@@ -74,7 +75,7 @@ class AppStore {
     this.songs = this.songs.map(song => {
       if (song.id === this.playingSong.id) song.isPlaying = !audio.paused;
       return song;
-    })
+    });
   }
 
   seek(value) {
@@ -96,12 +97,13 @@ class AppStore {
   }
 
   startSongChange(direction) {
+    if (isAnimating) return;
     const songsListEl = document.getElementById('songsList');
     const prevSongEl = document.getElementById('activeSong');
     const nextSongEl = prevSongEl[direction === 'next' ? 'nextElementSibling' : 'previousElementSibling'];
-    const movement = `${direction === 'next' ? '-' : '+' }=${prevSongEl.offsetWidth}`;
+    const movement = `${direction === 'next' ? '-' : '+' }=${(prevSongEl.offsetWidth / songsListEl.offsetWidth) * 100}%`;
     const animationDuration = 0.3;
-
+    isAnimating = true;
     TweenLite.to(prevSongEl, animationDuration, {
       scale: 0.85,
       x: 0,
@@ -112,19 +114,20 @@ class AppStore {
     });
     TweenLite.to(songsListEl, animationDuration, {
       x: movement,
-      onComplete: () => { this.changeSong(direction) },
+      onComplete: () => {
+        isAnimating = false;
+        this.changeSong(direction)
+      },
     });
   }
 
   changeSong(direction) {
     this.resetCurrentSong();
-    const nextSong = this.songs
-      .find(song => song.index === this.playingSong.index + (direction === 'next' ? 1 : -1));
+    const nextSongId = this.songs
+      .find(song => song.index === this.playingSong.index + (direction === 'next' ? 1 : -1)).id;
     this.songs = this.songs.map(song => {
-      const condition = song.id === nextSong.id;
-      song.isPlaying = condition;
-      song.isActive = condition;
-      return song;
+      const condition = song.id === nextSongId;
+      return {...song, isPlaying: condition, isActive: condition };
     });
     this.setDuration();
     this.updateCurrent();

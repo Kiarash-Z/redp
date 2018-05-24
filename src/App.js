@@ -9,7 +9,7 @@ class App extends Component {
   render() {
     return (
       <Provider {...stores}>
-        <div className="App">
+        <div className="App" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
           <Nav />
           <Player />
         </div>

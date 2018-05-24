@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Song from './Song';
+import { SIZE } from '../../../../constants/appConstants';
 
 const SongsList = inject('appStore')(observer(class SongsListClass extends Component {
   renderSongs = () => {

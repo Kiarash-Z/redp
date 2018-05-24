@@ -35,8 +35,8 @@
 }
 
 .song__image-container {
-  width: 32vw;
-  height: 32vw;
+  width: 43vh;
+  height: 43vh;
   margin-top: 4rem;
   border-radius: 5px;
   box-shadow: 0.5rem 0.5rem 3rem var(--color-black-light);
@@ -63,5 +63,5 @@
 .song__bars {
   position: absolute;
   bottom: 0;
-  width: 32vw;
+  width: 43vh;
 }
