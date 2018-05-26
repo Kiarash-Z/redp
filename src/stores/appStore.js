@@ -9,6 +9,7 @@ class AppStore {
   current = 0;
 
   openFile(filePaths) {
+    this.resetPlayer();
     this.songs = filePaths.map((path, index) => {
       const filePath = `file://${path}`
       const audio = new Audio();
@@ -23,6 +24,12 @@ class AppStore {
     });
     this.playFirstSong();
     this.readSongsMetadata();
+  }
+
+  resetPlayer() {
+    if (this.playingSong.audio) this.playingSong.audio.pause();
+    const songsListEl = document.getElementById('songsList');
+    TweenLite.set(songsListEl, { x: '0%' });
   }
 
   readSongsMetadata() {
@@ -192,6 +199,7 @@ decorate(AppStore, {
   startSongChange: action.bound,
   changeSong: action.bound,
   resetCurrentSong: action.bound,
+  resetPlayer: action.bound,
 
   playingSong: computed,
   formattedCurrent: computed,

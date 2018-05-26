@@ -23,6 +23,7 @@ const Song = inject('appStore')(observer(class Song extends Component {
   }
 
   updateImageTransition = () => {
+    // remove inline style so css class transform will be applied
     const imageEl = this.imageRef.current;
     if (imageEl) imageEl.style.removeProperty('transform');
   }
