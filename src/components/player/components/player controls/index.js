@@ -37,11 +37,11 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
     const progressEl = this.progressRef.current
     const { offsetLeft: left } = progressEl;
     const right = progressEl.offsetWidth + left;
-    if (e.clientX <= right && e.clientX >= left) {
-      const bar = this.barRef.current;
-      const progressed = (e.clientX - left) / progressEl.offsetWidth;
-      this.props.appStore.updateCurrent(progressed * this.props.appStore.duration)
-    }
+    let progressed = 0;
+    if (e.clientX <= right && e.clientX >= left) progressed = (e.clientX - left) / progressEl.offsetWidth;
+    else if (e.clientX > right) progressed = 1;
+    else if (e.clientX < left) progressed = 0;
+    this.props.appStore.updateCurrent(progressed * this.props.appStore.duration)
   }
 
   changeProgress = e => {
@@ -58,13 +58,13 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
     const { appStore } = this.props;
     return (
       <div className="player-controls">
-        <div className="player-progress-container" ref={this.progressRef}>
+        <button className="player-progress-container" ref={this.progressRef} disabled={appStore.isControlDisabled}>
           <div className="player-progress">
             <div className="player-progress__bar" ref={this.barRef} style={{ width: appStore.barWidth }}>
               <div className="player-progress__dragger" />
             </div>
           </div>
-        </div>
+        </button>
 
         <div className="player-time">
           <span>{appStore.formattedCurrent}</span>

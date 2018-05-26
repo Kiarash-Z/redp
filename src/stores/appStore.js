@@ -93,16 +93,20 @@ class AppStore {
   }
 
   updateCurrent(value) {
-    this.current = value || this.playingSong.audio.currentTime;
+    // 0 is false
+    this.current = value === undefined ? this.playingSong.audio.currentTime : value;
   }
 
   startSongChange(direction) {
     if (isAnimating) return;
     const songsListEl = document.getElementById('songsList');
     const prevSongEl = document.getElementById('activeSong');
+    const prevSongTitleEl = prevSongEl.querySelector('.song__titles-container');
     const nextSongEl = prevSongEl[direction === 'next' ? 'nextElementSibling' : 'previousElementSibling'];
+    const nextSongTitleEl = nextSongEl.querySelector('.song__titles-container');
     const movement = `${direction === 'next' ? '-' : '+' }=${(prevSongEl.offsetWidth / songsListEl.offsetWidth) * 100}%`;
-    const animationDuration = 0.3;
+    nextSongTitleEl.classList.remove('-hidden');
+    const animationDuration = 0.4;
     isAnimating = true;
     TweenLite.to(prevSongEl, animationDuration, {
       scale: 0.85,
@@ -112,6 +116,14 @@ class AppStore {
       scale: 1,
       x: 0,
     });
+    TweenLite.to(nextSongTitleEl, animationDuration / 1.5, {
+      opacity: 1,
+      y: 0,
+    })
+    TweenLite.to(prevSongTitleEl, animationDuration / 1.5, {
+      opacity: 0,
+      y: 20,
+    })
     TweenLite.to(songsListEl, animationDuration, {
       x: movement,
       onComplete: () => {

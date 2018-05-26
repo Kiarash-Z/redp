@@ -17,9 +17,31 @@
   transform: scale(0.85);
 }
 
+.song.-scaled .song__image {
+  z-index: 1;
+  cursor: pointer;
+}
+
+.song__image.-next:hover {
+  transform: translateX(-2rem);
+}
+
+.song__image.-previous:hover {
+  transform: translateX(2rem);
+}
+
+.song__image.-next:active, .song__image.-previous:active {
+  transform: translateX(0);
+}
+
 .song__titles-container {
   text-align: center;
   font-size: 1.5rem;
+}
+
+.song__titles-container.-hidden {
+  transform: translateY(20px) !important;
+  opacity: 0 !important;
 }
 
 .song__title {
@@ -49,6 +71,9 @@
   width: 100%;
   height: 100%;
   border-radius: 5px;
+  transform: translateX(0);
+  transition: 0.2s transform;
+  position: static;
 }
 
 .song__image-icon {

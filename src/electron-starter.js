@@ -7,6 +7,7 @@ const { APP_NAME, SIZE, MAX_SIZE, MIN_SIZE } = require('./constants/appConstants
 
 app.setName(APP_NAME)
 
+// Menu
 const mainMenuTemplate = [
   {
     label: 'File',
@@ -28,6 +29,28 @@ const mainMenuTemplate = [
     ],
   }
 ];
+if (process.platform === 'darwin') {
+  mainMenuTemplate.unshift({
+    label: app.getName(),
+    submenu: [
+      { role: 'about'},
+      { type: 'separator'},
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideothers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      {
+        label: 'Quit',
+        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+          app.quit();
+        }
+      },
+    ]
+  })
+}
+
 let mainWindow
 
 function createWindow () {
@@ -38,32 +61,9 @@ function createWindow () {
     webPreferences: { webSecurity: false }
   });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-  mainWindow.on('closed', () => mainWindow = null);
+  mainWindow.on('closed', () => { mainWindow = null });
   mainWindow.setMinimumSize(MIN_SIZE.width, MIN_SIZE.height);
   mainWindow.setMaximumSize(MAX_SIZE.width, MAX_SIZE.height);
-  // Menu
-  if (process.platform === 'darwin') {
-    mainMenuTemplate.unshift({
-      label: app.getName(),
-      submenu: [
-        { role: 'about'},
-        { type: 'separator'},
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        {
-          label: 'Quit',
-          accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
-          click() {
-            app.quit();
-          }
-        },
-      ]
-    })
-
-  }
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
 }

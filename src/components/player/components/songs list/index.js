@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Song from './Song';
-import { SIZE } from '../../../../constants/appConstants';
 
+const audioContext = new AudioContext();
 const SongsList = inject('appStore')(observer(class SongsListClass extends Component {
   renderSongs = () => {
     if (!this.props.appStore.songs.length) return <Song />;
-    return this.props.appStore.songs.map(song => <Song key={song.id} {...song} />);
+    return this.props.appStore.songs.map(song => <Song audioContext={audioContext} key={song.id} {...song} />);
   }
   render() {
     return (

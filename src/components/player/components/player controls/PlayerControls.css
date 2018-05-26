@@ -1,12 +1,13 @@
 .player-controls {
   width: 50%;
-  margin-top: 9rem;
+  margin-top: 8.5rem;
   min-width: 30rem;
 }
 
 .player-progress-container {
   padding: 0.5rem 0;
   cursor: pointer;
+  width: 100%;
 }
 
 .player-progress {

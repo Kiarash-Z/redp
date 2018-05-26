@@ -10,12 +10,16 @@ html {
 body {
   background: var(--color-white);
   -webkit-app-region: drag;
+  overflow-x: hidden;
 }
 
 button {
   border: none;
   background: transparent;
   cursor: pointer;
+}
+
+[role="button"], button {
   -webkit-app-region: no-drag;
 }
 
@@ -30,5 +34,10 @@ h1, h2, h3, h4, h5, h6, p, span, strong, i {
 @media (min-width: 1200px) {
   html {
     font-size: 75%;
+  }
+}
+@media (max-width: 576px) {
+  html {
+    font-size: 56.25%;
   }
 }
