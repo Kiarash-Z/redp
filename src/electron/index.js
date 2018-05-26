@@ -1,11 +1,39 @@
-const { app, BrowserWindow, Menu, dialog } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const url = require('url');
+const fs = require('fs');
+const { promisify } = require('bluebird');
+const readdirAboslute = require('readdir-absolute');
 
-const { APP_NAME, SIZE, MAX_SIZE, MIN_SIZE } = require('./constants/appConstants');
+const readdir = promisify(readdirAboslute);
 
-app.setName(APP_NAME)
+const { APP_NAME, SIZE, MAX_SIZE, MIN_SIZE } = require('../constants/appConstants');
+
+app.setName(APP_NAME);
+
+const openDialog = () => {
+  dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory', 'openFile', 'multiSelections'],
+    filters: [
+      {name: 'Audio Files', extensions: ['mp3']},
+    ]
+  }, filePaths => {
+    if (!filePaths) return;
+    const paths = filePaths.map(path => {
+      if(fs.lstatSync(path).isDirectory()) return readdir(path);
+      return Promise.resolve(path);
+    });
+    Promise.all(paths).then(values => {
+      const filteredPaths = values
+        .reduce((a, b) => {
+          if (Array.isArray(a)) return a.concat(b);
+          return [a].concat(b);
+        })
+        .filter(path => path.endsWith('.mp3'));
+        mainWindow.webContents.send('files:open', filteredPaths);
+    });
+  });
+}
 
 // Menu
 const mainMenuTemplate = [
@@ -13,19 +41,12 @@ const mainMenuTemplate = [
     label: 'File',
     submenu: [
       {
-        label: 'Open File(s)',
+        label: 'Open',
         click() {
-          dialog.showOpenDialog(mainWindow, {
-            properties: ['openFile', 'multiSelections'],
-            filters: [
-              {name: 'Audio Files', extensions: ['mp3']},
-            ]
-          }, filePaths => {
-            if(filePaths) mainWindow.webContents.send('files:open', filePaths)
-          });
-        }
-      },
-      { label: 'Open Folder' }
+          openDialog();
+        },
+        accelerator: process.platform === 'darwin' ? 'Command+O' : 'Ctrl+O',
+      }
     ],
   }
 ];
@@ -83,6 +104,9 @@ if (isDev) {
     ]
   })
 }
+
+// open dialog from the app
+ipcMain.on('dialog:open', openDialog);
 
 app.on('ready', createWindow)
 

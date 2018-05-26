@@ -24,17 +24,11 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.a-left:before {
+.a-folder:before {
   content: "\e900";
 }
-.a-list:before {
-  content: "\e901";
-}
-.a-repeat:before {
-  content: "\e902";
-}
-.a-folder:before {
-  content: "\e905";
+.a-music:before {
+  content: "\e908";
 }
 .a-next:before {
   content: "\e903";
@@ -47,7 +41,4 @@ i {
 }
 .a-play:before {
   content: "\e907";
-}
-.a-music:before {
-  content: "\e908";
 }

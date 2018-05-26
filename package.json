@@ -2,8 +2,9 @@
   "name": "music",
   "version": "0.1.0",
   "private": true,
-  "main": "src/electron-starter.js",
+  "main": "src/electron",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "classnames": "^2.2.5",
     "electron-is-dev": "^0.3.0",
     "gsap": "^2.0.0",
@@ -12,7 +13,8 @@
     "mobx-react": "^5.1.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "readdir-absolute": "^1.0.1"
   },
   "scripts": {
     "rs-start": "react-scripts start",
