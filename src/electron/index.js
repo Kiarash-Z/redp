@@ -24,6 +24,7 @@ const openDialog = () => {
       return Promise.resolve(path);
     });
     Promise.all(paths).then(values => {
+      if (values.length === 1) values[0] = [values[0]];
       const filteredPaths = values
         .reduce((a, b) => {
           if (Array.isArray(a)) return a.concat(b);

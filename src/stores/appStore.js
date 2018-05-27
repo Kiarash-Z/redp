@@ -1,35 +1,50 @@
-import { decorate, observable, computed, action } from 'mobx';
+import { decorate, observable, computed, action, intercept } from 'mobx';
 import { TweenLite } from 'gsap/all';
 const jsmediatags = window.require('jsmediatags');
 
 let isAnimating = false;
+
 class AppStore {
   songs = [];
   duration = 0;
   current = 0;
 
+  constructor() {
+    intercept(this, 'songs', change => {
+      console.log('newww',change.newValue)
+      if (change.newValue.length === 0) change.newValue = [{ 'dsf': 'sdfsd' }];
+      return change;
+    })
+  }
+
   openFile(filePaths) {
-    this.resetPlayer();
-    this.songs = filePaths.map((path, index) => {
-      const filePath = `file://${path}`
-      const audio = new Audio();
-      audio.src = filePath;
-      return {
-        index,
-        filePath,
-        audio,
-        fsPath: path,
-        id: path,
-      }
-    });
-    this.playFirstSong();
-    this.readSongsMetadata();
+    const update = () => {
+      this.songs = filePaths.map((path, index) => {
+        const filePath = `file://${path}`
+        const audio = new Audio();
+        audio.src = filePath;
+        return {
+          index,
+          filePath,
+          audio,
+          fsPath: path,
+          id: path,
+        }
+      });
+      this.playFirstSong();
+      this.readSongsMetadata();
+    }
+    if (this.songs.length) this.resetPlayer().then(update);
+    else update();
   }
 
   resetPlayer() {
     if (this.playingSong.audio) this.playingSong.audio.pause();
     const songsListEl = document.getElementById('songsList');
     TweenLite.set(songsListEl, { x: '0%' });
+    this.songs = [];
+    // allow [] to be sent to component
+    return Promise.resolve();
   }
 
   readSongsMetadata() {
