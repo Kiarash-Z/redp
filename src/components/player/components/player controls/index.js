@@ -21,6 +21,7 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
       isMouseDown = false;
       this.changeProgress(e);
     });
+    window.addEventListener('keypress', this.handleKeyPress);
   }
 
   componentDidUpdate() {
@@ -30,6 +31,10 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
 
     this.props.appStore.playingSong.audio.removeEventListener('loadedmetadata', this.props.appStore.setDuration);
     this.props.appStore.playingSong.audio.addEventListener('loadedmetadata', this.props.appStore.setDuration);
+  }
+
+  handleKeyPress = ({ code }) => {
+    if(code === 'Space') this.props.appStore.togglePlay();
   }
 
   handleMouseMove = e => {

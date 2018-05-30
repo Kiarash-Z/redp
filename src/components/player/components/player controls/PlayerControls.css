@@ -70,7 +70,7 @@
 .player-controls__button.-play {
   padding: 2.5rem;
   border-radius: 50%;
-  box-shadow: 0 0 4rem var(--color-black-very-light);
+  box-shadow: 0 0 3rem var(--color-black-very-light);
   display: flex;
   justify-content: center;
   align-items: center;
