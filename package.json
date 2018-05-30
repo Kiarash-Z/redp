@@ -18,7 +18,7 @@
   },
   "scripts": {
     "rs-start": "react-scripts start",
-    "start": "concurrently \"BROWSER=none yarn rs-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "start": "concurrently \"yarn rs-start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
