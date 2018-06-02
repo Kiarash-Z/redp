@@ -6,7 +6,6 @@ import Song from './Song';
 const audioContext = new AudioContext();
 const SongsList = inject('appStore')(observer(class SongsListClass extends Component {
   renderSongs = () => {
-    console.log(this.props.appStore.songs);
     if (!this.props.appStore.songs.length) return <Song />;
     return this.props.appStore.songs.map(song => <Song audioContext={audioContext} key={song.id} {...song} />);
   }

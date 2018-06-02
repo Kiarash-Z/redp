@@ -1,13 +1,18 @@
 {
-  "name": "music",
+  "homepage": "./",
+  "name": "smplayer",
+  "productName": "SMPlayer",
+  "description": "A simple music player for your local files",
   "version": "0.1.0",
   "private": true,
+  "postinstall": "electron-builder install-app-deps",
   "main": "src/electron",
   "dependencies": {
     "bluebird": "^3.5.1",
     "classnames": "^2.2.5",
+    "concurrently": "^3.5.1",
     "electron-is-dev": "^0.3.0",
-    "gsap": "^2.0.0",
+    "gsap": "^2.0.1",
     "jsmediatags": "^3.8.1",
     "mobx": "^4.2.1",
     "mobx-react": "^5.1.2",
@@ -21,12 +26,41 @@
     "start": "concurrently \"yarn rs-start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "package-app": "electron-builder -mwl"
   },
   "devDependencies": {
-    "concurrently": "^3.5.1",
     "electron": "^2.0.0",
-    "electron-builder": "^20.13.3",
+    "electron-builder": "^20.15.1",
     "wait-on": "^2.1.0"
+  },
+  "author": {
+    "name": "Kiarash Zarinmehr",
+    "email": "kiarash.zar@gmail.com"
+  },
+  "build": {
+    "appId": "com.electron.smplayer",
+    "mac": {
+      "category": "Music",
+      "icon": "./src/assets/icons/mac/icon.icns"
+    },
+    "dmg": {
+      "background": "./src/assets/installer background/background.png"
+    },
+    "win": {
+      "icon": "./src/assets/icons/win/icon.ico"
+    },
+    "linux": {
+      "icon": "./src/assets/icons/png"
+    },
+    "files": [
+      "build/**/*",
+      "src/electron/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "extends": null
   }
 }

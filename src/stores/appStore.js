@@ -11,7 +11,6 @@ class AppStore {
 
   constructor() {
     intercept(this, 'songs', change => {
-      console.log('newww',change.newValue)
       if (change.newValue.length === 0) change.newValue = [{ 'dsf': 'sdfsd' }];
       return change;
     })
@@ -56,17 +55,21 @@ class AppStore {
           onSuccess({ tags }) {
             that.songs = that.songs.map(song => {
               if (song.id === item.id && !song.artist) {
-              const imageData = tags.picture.data;
-              let base64String = '';
-              for (var i = 0; i < imageData.length; i++) {
-                base64String += String.fromCharCode(imageData[i]);
-              }
+                let picture = '';
+                if (tags.picture) {
+                  const imageData = tags.picture.data;
+                  let base64String = '';
+                  for (var i = 0; i < imageData.length; i++) {
+                    base64String += String.fromCharCode(imageData[i]);
+                  }
+                  picture = `data:${tags.picture.format};base64, ${window.btoa(base64String)}`;
+                }
                 song = {
                   ...song,
+                  picture,
                   audio: song.audio,
                   title: tags.title,
                   artist: tags.artist,
-                  picture: `data:${tags.picture.format};base64, ${window.btoa(base64String)}`,
                 };
               }
               return song;

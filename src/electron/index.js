@@ -7,29 +7,39 @@ const readdirAboslute = require('readdir-absolute');
 
 const readdir = promisify(readdirAboslute);
 
-const { APP_NAME, SIZE, MAX_SIZE, MIN_SIZE } = require('../constants/appConstants');
+app.setName('SMPlayer');
 
-app.setName(APP_NAME);
+const isMac = process.platform === 'darwin';
 
-const openDialog = () => {
+const openDialog = (type = 'file') => {
+  const properties = ['multiSelections'];
+  if (type === 'both') properties.unshift('openDirectory', 'openFile');
+  else if (type === 'folder') properties.unshift('openDirectory');
+  else if (type === 'file') properties.unshift('openFile');
+
   dialog.showOpenDialog(mainWindow, {
-    properties: ['openDirectory', 'openFile', 'multiSelections'],
+    properties,
     filters: [
       {name: 'Audio Files', extensions: ['mp3']},
     ]
   }, filePaths => {
     if (!filePaths) return;
+    const flatten = arr => {
+        let flatted = [];
+        for(let i = 0; i < arr.length; i++) {
+            if (Array.isArray(arr[i])) {
+              flatted = flatted.concat(flatten(arr[i]));
+            } else flatted.push(arr[i]);
+        }
+        return flatted;
+    }
     const paths = filePaths.map(path => {
       if(fs.lstatSync(path).isDirectory()) return readdir(path);
       return Promise.resolve(path);
     });
     Promise.all(paths).then(values => {
       if (values.length === 1) values[0] = [values[0]];
-      const filteredPaths = values
-        .reduce((a, b) => {
-          if (Array.isArray(a)) return a.concat(b);
-          return [a].concat(b);
-        })
+      const filteredPaths = flatten(values)
         .filter(path => path.endsWith('.mp3'));
         mainWindow.webContents.send('files:open', filteredPaths);
     });
@@ -37,21 +47,25 @@ const openDialog = () => {
 }
 
 // Menu
+
+const fileSub = [
+  {
+    label: isMac ? 'Open' : 'Open File',
+    click() {
+      openDialog(isMac ? 'both' : 'file');
+    },
+    accelerator: isMac ? 'Command+O' : 'Ctrl+O',
+  }
+];
+
 const mainMenuTemplate = [
   {
     label: 'File',
-    submenu: [
-      {
-        label: 'Open',
-        click() {
-          openDialog();
-        },
-        accelerator: process.platform === 'darwin' ? 'Command+O' : 'Ctrl+O',
-      }
-    ],
+    submenu: fileSub,
   }
 ];
-if (process.platform === 'darwin') {
+
+if (isMac) {
   mainMenuTemplate.unshift({
     label: app.getName(),
     submenu: [
@@ -64,12 +78,20 @@ if (process.platform === 'darwin') {
       { type: 'separator' },
       {
         label: 'Quit',
-        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+        accelerator: isMac ? 'Command+Q' : 'Ctrl+Q',
         click() {
           app.quit();
         }
       },
     ]
+  })
+} else {
+  fileSub.push({
+    label: 'Open Folder',
+    click() {
+      openDialog('folder');
+    },
+    accelerator: 'Ctrl+Shift+O',
   })
 }
 
@@ -77,15 +99,16 @@ let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: SIZE.width,
-    height: SIZE.height,
+    width: 1000,
+    height: 750,
     titleBarStyle: 'hidden',
-    webPreferences: { webSecurity: false }
+    webPreferences: { webSecurity: false },
+    icon: path.join(__dirname, '../assets/icons/png/64x64.png'),
   });
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../../build/index.html')}`);
   mainWindow.on('closed', () => { mainWindow = null });
-  mainWindow.setMinimumSize(MIN_SIZE.width, MIN_SIZE.height);
-  mainWindow.setMaximumSize(MAX_SIZE.width, MAX_SIZE.height);
+  mainWindow.setMinimumSize(420, 530);
+  mainWindow.setMaximumSize(1200, 900);
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
 }
@@ -96,7 +119,7 @@ if (isDev) {
     submenu: [
       {
         label: 'Toggle DevTools',
-        accelerator: process.platform === 'darwin' ? 'Command+I' : 'Ctrl+I',
+        accelerator: isMac ? 'Command+I' : 'Ctrl+I',
         click(item, focusedWindow) {
           focusedWindow.toggleDevTools();
         }

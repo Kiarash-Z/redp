@@ -79,7 +79,7 @@
 .song__image-icon {
   font-size: 15rem;
   transform: translateX(-15px);
-  background: -webkit-linear-gradient(#c9c8c8, var(--color-primary));
+  background: -webkit-linear-gradient(var(--color-secondary), var(--color-primary));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
