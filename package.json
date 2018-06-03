@@ -1,7 +1,7 @@
 {
   "homepage": "./",
-  "name": "smplayer",
-  "productName": "SMPlayer",
+  "name": "redp",
+  "productName": "RedP",
   "description": "A simple music player for your local files",
   "version": "0.1.0",
   "private": true,
@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "package-app": "electron-builder -mwl"
+    "package-app": "electron-builder -m -w --linux deb --ia32 -"
   },
   "devDependencies": {
     "electron": "^2.0.0",
@@ -39,7 +39,7 @@
     "email": "kiarash.zar@gmail.com"
   },
   "build": {
-    "appId": "com.electron.smplayer",
+    "appId": "com.electron.redp",
     "mac": {
       "category": "Music",
       "icon": "./src/assets/icons/mac/icon.icns"

@@ -7,7 +7,7 @@ const readdirAboslute = require('readdir-absolute');
 
 const readdir = promisify(readdirAboslute);
 
-app.setName('SMPlayer');
+app.setName('RedP');
 
 const isMac = process.platform === 'darwin';
 
