@@ -34,7 +34,7 @@ const PlayerControls = inject('appStore')(observer(class PlayerControlsClass ext
   }
 
   handleKeyPress = ({ code }) => {
-    if(code === 'Space') this.props.appStore.togglePlay();
+    if (code === 'Space') this.props.appStore.togglePlay();
   }
 
   handleMouseMove = e => {

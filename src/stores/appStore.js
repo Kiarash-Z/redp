@@ -120,10 +120,28 @@ class AppStore {
   updateCurrent(value) {
     // 0 is false
     this.current = value === undefined ? this.playingSong.audio.currentTime : value;
+    if (this.current === this.playingSong.audio.duration &&
+      this.current === this.playingSong.audio.currentTime
+    ) {
+      this.startSongChange('next');
+    }
   }
 
   startSongChange(direction) {
+    const nextSong = this.songs
+      .find(song => song.index === this.playingSong.index + (direction === 'next' ? 1 : -1));
     if (isAnimating) return;
+    if (!nextSong) {
+      this.songs = this.songs.map(song => {
+        if (song.id === this.playingSong.id) {
+          song.isPlaying = false;
+          song.audio.pause();
+          this.seek(0);
+        }
+        return song;
+      });
+      return;
+    }
     const songsListEl = document.getElementById('songsList');
     const prevSongEl = document.getElementById('activeSong');
     const prevSongTitleEl = prevSongEl.querySelector('.song__titles-container');
@@ -159,9 +177,11 @@ class AppStore {
   }
 
   changeSong(direction) {
+    const nextSong = this.songs
+      .find(song => song.index === this.playingSong.index + (direction === 'next' ? 1 : -1));
+    if (!nextSong) return;
     this.resetCurrentSong();
-    const nextSongId = this.songs
-      .find(song => song.index === this.playingSong.index + (direction === 'next' ? 1 : -1)).id;
+    const { id: nextSongId } = nextSong;
     this.songs = this.songs.map(song => {
       const condition = song.id === nextSongId;
       return {...song, isPlaying: condition, isActive: condition };
