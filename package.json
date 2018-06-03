@@ -27,7 +27,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "package-app": "electron-builder -m -w --linux deb --ia32 -"
+    "package-app": "electron-builder -m -w --linux deb",
+    "package-app-32": "electron-builder --win --linux deb --ia32"
   },
   "devDependencies": {
     "electron": "^2.0.0",
